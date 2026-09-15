@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TikTok sign-in — copy this back to the app</title>
+<style>
+body{font-family:system-ui,Segoe UI,Arial,sans-serif;background:#0b0b10;color:#eee;max-width:720px;margin:0 auto;padding:40px 20px;line-height:1.6}
+h1{font-size:22px;margin:0 0 6px}
+.box{background:#15151d;border:1px solid #2a2a38;border-radius:12px;padding:16px;margin:18px 0}
+code{word-break:break-all;font-size:13px;color:#9fe}
+button{background:#1db954;border:0;color:#04240f;font-weight:700;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:15px}
+.bad{color:#f88}
+.ok{color:#9f9}
+small{color:#888}
+</style></head><body>
+<h1>TikTok sign-in</h1>
+<div id="out"><p>reading the answer TikTok sent…</p></div>
+<script>
+(function(){
+  var q = new URLSearchParams(location.search);
+  var code = q.get('code'), err = q.get('error'), desc = q.get('error_description') || '';
+  var out = document.getElementById('out');
+  if(err){
+    out.innerHTML = '<p class="bad"><b>TikTok said no:</b> ' + err + ' ' + desc + '</p>' +
+                    '<p>Go back to the app and try SIGN IN WITH TIKTOK again.</p>';
+    return;
+  }
+  if(!code){
+    out.innerHTML = '<p class="bad">No code in this address. Start the sign-in from the app.</p>';
+    return;
+  }
+  out.innerHTML = '<p class="ok">Signed in. One last step:</p>' +
+    '<div class="box"><code id="u"></code></div>' +
+    '<p><button id="c">COPY THIS ADDRESS</button></p>' +
+    '<p>Paste it into the box beside <b>FINISH</b> in the app’s CONNECT TIKTOK panel, then press FINISH.</p>' +
+    '<p><small>This page holds nothing and sends nothing anywhere. The code only works once, and only for your app.</small></p>';
+  document.getElementById('u').textContent = location.href;
+  document.getElementById('c').onclick = function(){
+    navigator.clipboard.writeText(location.href).then(function(){
+      document.getElementById('c').textContent = 'COPIED — now paste it in the app';
+    }, function(){
+      document.getElementById('c').textContent = 'select the text above and copy it by hand';
+    });
+  };
+})();
+</script>
+</body></html>
